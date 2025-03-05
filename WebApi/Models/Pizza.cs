@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace WebApi.Models
 {
@@ -12,6 +13,8 @@ namespace WebApi.Models
         public bool IsGlutenFree { get; set; }
 
         public Sauce? Sauce { get; set; }
+
+        [JsonIgnore]
         public ICollection<Topping>? Toppings { get; set; }
     }
 

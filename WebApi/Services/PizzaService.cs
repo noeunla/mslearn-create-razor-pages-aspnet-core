@@ -17,18 +17,6 @@ namespace WebApi.Services
             _context = context;
         }
 
-        static List<Pizza> Pizzas { get; }
-        static int nextId = 3;
-        static PizzaService()
-        {
-            Pizzas = new List<Pizza>
-        {
-            new Pizza { Id = 1, Name = "Classic Italian", IsGlutenFree = false },
-            new Pizza { Id = 2, Name = "Veggie", IsGlutenFree = true }
-        };
-        }
-
-
         /*
          * The AsNoTracking extension method instructs EF Core to disable 
             change tracking.Because this operation is read-only, 
