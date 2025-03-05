@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Serialization;
+using WebApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,9 @@ builder.Services.AddControllers()
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
+//Defines a SQLite connection string that points to a local file, ContosoPizza.db
+builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +34,12 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//This code calls the extension method that you defined earlier each time the app runs.
+app.CreateDbIfNotExists();
+
+app.MapGet("/", () => @"Contoso Pizza management API. Navigate to /swagger to open the Swagger test UI.");
+
 
 app.Run();
 

@@ -1,10 +1,22 @@
 ﻿using System.Xml.Linq;
+using WebApi.Data;
 using WebApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.JsonPatch.Operations;
+using Microsoft.EntityFrameworkCore.Metadata;
+
 
 namespace WebApi.Services
 {
-    public static class PizzaService
+    public class PizzaService
     {
+        private readonly PizzaContext _context;
+
+        public PizzaService(PizzaContext context)
+        {
+            _context = context;
+        }
+
         static List<Pizza> Pizzas { get; }
         static int nextId = 3;
         static PizzaService()
@@ -16,32 +28,89 @@ namespace WebApi.Services
         };
         }
 
-        public static List<Pizza> GetAll() => Pizzas;
 
-        public static Pizza? Get(int id) => Pizzas.FirstOrDefault(p => p.Id == id);
-
-        public static void Add(Pizza pizza)
+        /*
+         * The AsNoTracking extension method instructs EF Core to disable 
+            change tracking.Because this operation is read-only, 
+                AsNoTracking can optimize performance.
+        */
+        public IEnumerable<Pizza> GetAll()
         {
-            pizza.Id = nextId++;
-            Pizzas.Add(pizza);
+            return _context.Pizzas
+                .AsNoTracking()
+                .ToList();
         }
 
-        public static void Delete(int id)
+        public Pizza? GetById(int id)
         {
-            var pizza = Get(id);
-            if (pizza is null)
-                return;
-
-            Pizzas.Remove(pizza);
+            return _context.Pizzas
+                .Include(p => p.Toppings)
+                .Include(p => p.Sauce)
+                .AsNoTracking()
+                .SingleOrDefault(p => p.Id == id);
         }
 
-        public static void Update(Pizza pizza)
+        public Pizza Create(Pizza newPizza)
         {
-            var index = Pizzas.FindIndex(p => p.Id == pizza.Id);
-            if (index == -1)
-                return;
+            _context.Pizzas.Add(newPizza);
+            _context.SaveChanges();
 
-            Pizzas[index] = pizza;
+            return newPizza;
         }
+
+        public void Delete(int id)
+        {
+            var pizzaToDelete = _context.Pizzas.Find(id);
+            if (pizzaToDelete is not null)
+            {
+                _context.Pizzas.Remove(pizzaToDelete);
+                _context.SaveChanges();
+            }
+        }
+
+        //public static void Update(Pizza pizza)
+        //{
+        //    var index = Pizzas.FindIndex(p => p.Id == pizza.Id);
+        //    if (index == -1)
+        //        return;
+
+        //    Pizzas[index] = pizza;
+        //}
+
+        public void AddTopping(int pizzaId, int toppingId)
+        {
+            var pizzaToUpdate = _context.Pizzas.Find(pizzaId);
+            var toppingToAdd = _context.Toppings.Find(toppingId);
+
+            if (pizzaToUpdate is null || toppingToAdd is null)
+            {
+                throw new InvalidOperationException("Pizza or topping does not exist");
+            }
+
+            if (pizzaToUpdate.Toppings is null)
+            {
+                pizzaToUpdate.Toppings = new List<Topping>();
+            }
+
+            pizzaToUpdate.Toppings.Add(toppingToAdd);
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateSauce(int pizzaId, int sauceId)
+        {
+            var pizzaToUpdate = _context.Pizzas.Find(pizzaId);
+            var sauceToUpdate = _context.Sauces.Find(sauceId);
+
+            if (pizzaToUpdate is null || sauceToUpdate is null)
+            {
+                throw new InvalidOperationException("Pizza or sauce does not exist");
+            }
+
+            pizzaToUpdate.Sauce = sauceToUpdate;
+
+            _context.SaveChanges();
+        }
+
     }
 }
