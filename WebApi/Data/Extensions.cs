@@ -19,7 +19,13 @@
 
 /*
 If a database doesn't exist, EnsureCreated creates a new database. 
-    The new database isn't configured for migrations, so use this method with caution.
+    The new database isn't configured for migrations, 
+so use this method with caution.
+
+Puedes experimentar con la aplicación. Siempre que quieras empezar 
+con una base de datos nueva, detén la aplicación y elimina los 
+archivos ContosoPizza.db , .db-shm y .db-wal . 
+Luego, vuelve a ejecutar la aplicación.
 
 */
 

@@ -14,7 +14,7 @@ namespace WebApi.Models
 
         public Sauce? Sauce { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public ICollection<Topping>? Toppings { get; set; }
     }
 

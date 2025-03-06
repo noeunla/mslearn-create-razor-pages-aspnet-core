@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WebApi.Data;
 using WebApi.Services;
@@ -13,12 +14,18 @@ builder.Services.AddScoped<PizzaService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.Services.AddControllers()
+//            .AddNewtonsoftJson(options =>
+//            {
+//                //para el metodo patch
+//                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+//            });
+
 builder.Services.AddControllers()
-            .AddNewtonsoftJson(options =>
-            {
-                //para el metodo patch
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    });
 
 //Defines a SQLite connection string that points to a local file, ContosoPizza.db
 builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
