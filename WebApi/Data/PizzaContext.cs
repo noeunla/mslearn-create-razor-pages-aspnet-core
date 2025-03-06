@@ -33,5 +33,8 @@ or the database schema is the source of truth.
 Migrations o Code First, crea la bd a partir del modelo
 Reverse engineering, crea el modelo a partir de una bd ya existente
 
+Comando para estructurar el codigo de la ingenieria inversa en visual studio code:
+dotnet ef dbcontext scaffold "Data Source=Promotions/Promotions.db" Microsoft.EntityFrameworkCore.Sqlite --context-dir Data --output-dir Models
+
 
 */

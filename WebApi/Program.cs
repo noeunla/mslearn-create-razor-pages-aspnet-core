@@ -30,6 +30,9 @@ builder.Services.AddControllers()
 //Defines a SQLite connection string that points to a local file, ContosoPizza.db
 builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
 
+builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
