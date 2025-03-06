@@ -36,5 +36,17 @@ Reverse engineering, crea el modelo a partir de una bd ya existente
 Comando para estructurar el codigo de la ingenieria inversa en visual studio code:
 dotnet ef dbcontext scaffold "Data Source=Promotions/Promotions.db" Microsoft.EntityFrameworkCore.Sqlite --context-dir Data --output-dir Models
 
+Comando para trabajar con Code first en visual studio code:
+git clone https://github.com/MicrosoftDocs/mslearn-persist-data-ef-core
+cd mslearn-persist-data-ef-core
+code .
+
+dotnet build
+dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add InitialCreate --context PizzaContext
+dotnet ef database update --context PizzaContext
 
 */
