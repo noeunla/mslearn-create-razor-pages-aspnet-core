@@ -32,3 +32,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+
+// https://learn.microsoft.com/en-us/training/modules/create-razor-pages-aspnet-core/
